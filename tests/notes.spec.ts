@@ -1,4 +1,4 @@
-import { test } from './fixtures/pages'
+import { expect, test } from './fixtures/pages'
 import { uniqueSecret } from './support/testData'
 
 // Grouped tests for Cryptgeon note lifecycle
@@ -32,6 +32,16 @@ test.describe('Cryptgeon note lifecycle', () => {
     await notePage.openAndRevealPasswordProtectedNote(note)
 
     await notePage.expectTextVisible(text)
+  })
+
+  test.fixme('provides a shareable generated password control', async ({ createNotePage, page }) => {
+    await createNotePage.goto()
+    await createNotePage.advancedSwitch.click()
+    await createNotePage.customPasswordSwitch.click()
+    await createNotePage.generatePasswordButton.click()
+
+    await expect(createNotePage.passwordInput).not.toHaveValue('')
+    await expect(page.getByRole('button', { name: /copy.*password|password.*copy/i })).toBeVisible()
   })
 
   // Timer check: verifies a time-limited note disappears after its expiration window.
