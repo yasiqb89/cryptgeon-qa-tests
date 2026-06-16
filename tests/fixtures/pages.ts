@@ -7,6 +7,7 @@ type PageFixtures = {
   notePage: NotePage
 }
 
+// Provides page objects as fixtures so specs focus on user behavior instead of setup.
 export const test = base.extend<PageFixtures>({
   createNotePage: async ({ page }, use) => {
     await use(new CreateNotePage(page))

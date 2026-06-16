@@ -38,6 +38,7 @@ export class NotePage {
     await this.reveal()
   }
 
+  // Opens a password-protected note and supplies the password before reveal.
   async openAndRevealPasswordProtectedNote(note: PasswordProtectedNote) {
     await this.openAndReveal(note.link, note.password)
   }

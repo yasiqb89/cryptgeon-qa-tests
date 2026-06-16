@@ -70,14 +70,17 @@ export class CreateNotePage {
     return this.shareLinkInput.inputValue()
   }
 
+  // Creates a note protected by a caller-provided password.
   async createPasswordProtectedTextNote(note: PasswordProtectedTextNote) {
     return this.createTextNote(note.text, { password: note.password })
   }
 
+  // Creates a note that expires after a configured number of minutes.
   async createExpiringTextNote(note: ExpiringTextNote) {
     return this.createTextNote(note.text, { expirationMinutes: note.expirationMinutes })
   }
 
+  // Captures the dice-generated password because it must be shared separately from the link.
   async createGeneratedPasswordProtectedTextNote(
     note: GeneratedPasswordProtectedTextNote,
   ): Promise<CreatedPasswordProtectedNote> {

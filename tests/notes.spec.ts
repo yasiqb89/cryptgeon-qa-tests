@@ -45,6 +45,7 @@ test.describe('Cryptgeon note lifecycle', () => {
     },
   )
 
+  // Bug coverage: the generated password works, but the UI lacks an explicit copy/share control.
   test(
     'provides a shareable generated password control',
     { tag: ['@bug', '@password', '@generated-password'] },
@@ -54,6 +55,7 @@ test.describe('Cryptgeon note lifecycle', () => {
       await createNotePage.customPasswordSwitch.click()
       await createNotePage.generatePasswordButton.click()
 
+      // This expectation documents the missing UX affordance and should fail until the app adds it.
       await expect(createNotePage.passwordInput).not.toHaveValue('')
       await expect(page.getByRole('button', { name: /copy.*password|password.*copy/i })).toBeVisible()
     },
