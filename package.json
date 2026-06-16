@@ -6,7 +6,7 @@
     "test": "playwright test",
     "test:json": "PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json playwright test",
     "test:sync:notion": "PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json playwright test; TEST_EXIT=$?; npm run sync:notion; SYNC_EXIT=$?; if [ $TEST_EXIT -ne 0 ]; then exit $TEST_EXIT; fi; exit $SYNC_EXIT",
-    "test:remote": "gh workflow run \"Cryptgeon QA\" --repo yasiqb89/cryptgeon-qa-tests --ref main",
+    "test:remote": "node scripts/run-remote-workflow.js",
     "test:remote:watch": "node scripts/run-remote-workflow.js --watch",
     "sync:notion": "node scripts/sync-notion-results.js",
     "test:headed": "playwright test --headed",
