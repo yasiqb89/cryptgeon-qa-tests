@@ -7,19 +7,16 @@ const RESULT_TO_STATUS = {
   Blocked: 'Needs Review',
 }
 
+const DEFAULT_DATABASE_ID = 'd91ba52b4486436d948530122210e909'
 const NOTION_VERSION = process.env.NOTION_VERSION ?? '2022-06-28'
 const notionToken = process.env.NOTION_TOKEN
-const databaseId = process.env.NOTION_TEST_CASES_DATABASE_ID
+const databaseId = process.env.NOTION_TEST_CASES_DATABASE_ID ?? DEFAULT_DATABASE_ID
 const titleProperty = process.env.NOTION_TEST_TITLE_PROPERTY ?? 'Test Function'
 const fallbackTitleProperty = process.env.NOTION_TEST_CASE_PROPERTY ?? 'Test Case'
 const resultsPath = process.argv[2] ?? process.env.PLAYWRIGHT_JSON_OUTPUT_NAME ?? 'playwright-results.json'
 
 if (!notionToken) {
   throw new Error('Missing NOTION_TOKEN. Add it as a GitHub Actions secret or export it locally.')
-}
-
-if (!databaseId) {
-  throw new Error('Missing NOTION_TEST_CASES_DATABASE_ID. Add it as a GitHub Actions variable or export it locally.')
 }
 
 const notionHeaders = {

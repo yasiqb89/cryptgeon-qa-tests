@@ -43,7 +43,7 @@ jobs:
         id: notion
         if: always()
         run: |
-          if [ -n "${{ secrets.NOTION_TOKEN }}" ] && [ -n "${{ vars.NOTION_TEST_CASES_DATABASE_ID }}" ]; then
+          if [ -n "${{ secrets.NOTION_TOKEN }}" ]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "enabled=false" >> "$GITHUB_OUTPUT"

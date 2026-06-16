@@ -102,5 +102,5 @@ npm run test:remote:watch
 GitHub Actions sync:
 
 - Add repository secret `NOTION_TOKEN` with a Notion integration token.
-- Add repository variable `NOTION_TEST_CASES_DATABASE_ID` with the Notion database ID.
-- If either value is missing, the workflow skips Notion sync and still runs the Playwright tests.
+- Optionally add repository variable `NOTION_TEST_CASES_DATABASE_ID` with the Notion database ID. If omitted, the current Cryptgeon QA database ID is used.
+- If `NOTION_TOKEN` is missing, the workflow skips Notion sync and still runs the Playwright tests.
