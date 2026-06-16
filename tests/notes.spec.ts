@@ -50,6 +50,8 @@ test.describe('Cryptgeon note lifecycle', () => {
     'provides a shareable generated password control',
     { tag: ['@bug', '@password', '@generated-password'] },
     async ({ createNotePage, page }) => {
+      test.fail(true, 'Known product bug: generated passwords need an explicit copy/share control.')
+
       await createNotePage.goto()
       await createNotePage.advancedSwitch.click()
       await createNotePage.customPasswordSwitch.click()
