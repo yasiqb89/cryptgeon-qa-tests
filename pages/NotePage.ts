@@ -4,6 +4,7 @@ import { expect, type Locator, type Page } from '@playwright/test'
 export class NotePage {
   readonly page: Page
   readonly showNoteButton: Locator
+  readonly passwordInput: Locator
   readonly result: Locator
   readonly pageContent: Locator
 
@@ -11,6 +12,7 @@ export class NotePage {
   constructor(page: Page) {
     this.page = page
     this.showNoteButton = page.getByTestId('show-note-button')
+    this.passwordInput = page.getByTestId('show-note-password')
     this.result = page.getByTestId('result')
     this.pageContent = page.locator('main')
   }
@@ -27,8 +29,11 @@ export class NotePage {
   }
 
   // Opens a share link and reveals the note content in one flow.
-  async openAndReveal(link: string) {
+  async openAndReveal(link: string, password?: string) {
     await this.open(link)
+    if (password) {
+      await this.passwordInput.fill(password)
+    }
     await this.reveal()
   }
 

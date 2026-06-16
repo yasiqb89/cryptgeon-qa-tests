@@ -17,6 +17,36 @@ test.describe('Cryptgeon note lifecycle', () => {
     await notePage.expectTextVisible(text)
   })
 
+  // Password check: verifies a note protected with a custom password can be decrypted.
+  test('creates and reads a password-protected text note', async ({ page }) => {
+    const createNotePage = new CreateNotePage(page)
+    const notePage = new NotePage(page)
+    const text = uniqueSecret('password')
+    const password = uniqueSecret('custom-password')
+
+    const link = await createNotePage.createTextNote(text, { password })
+    await notePage.openAndReveal(link, password)
+
+    await notePage.expectTextVisible(text)
+  })
+
+  // Timer check: verifies a time-limited note disappears after its expiration window.
+  test('expires a text note after the configured timer', async ({ page }) => {
+    test.setTimeout(90_000)
+
+    const createNotePage = new CreateNotePage(page)
+    const notePage = new NotePage(page)
+    const text = uniqueSecret('expiration')
+
+    const link = await createNotePage.createTextNote(text, { expirationMinutes: 1 })
+    await notePage.openAndReveal(link)
+    await notePage.expectTextVisible(text)
+
+    await page.waitForTimeout(65_000)
+    await notePage.open(link)
+    await notePage.expectDeletedOrNotFound()
+  })
+
   // Self-destruct check: verifies a default one-view note disappears after one read.
   test('deletes a one-view note after it is read', async ({ page }) => {
     const createNotePage = new CreateNotePage(page)

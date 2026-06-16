@@ -39,6 +39,8 @@ CRYPTGEON_BASE_URL=http://onetimeshare.gsfleet.io npm test
 - User can create a text note.
 - Generated share link can be opened.
 - Revealed note content matches the original secret text.
+- Password-protected text note can be decrypted with the custom password.
+- Time-limited note expires after the configured timer.
 - A default one-view note is deleted after it is read.
 - A consumed one-view note is not available after reload.
 
