@@ -43,7 +43,7 @@ jobs:
         id: notion
         if: always()
         run: |
-          if [ -n "${{ secrets.NOTION_TOKEN }}" ]; then
+          if [ -n "${{ secrets.NOTION_TOKEN }}" ] && [ -n "${{ vars.NOTION_TEST_CASES_DATABASE_ID }}" ]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "enabled=false" >> "$GITHUB_OUTPUT"
@@ -55,9 +55,7 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_TEST_CASES_DATABASE_ID: ${{ vars.NOTION_TEST_CASES_DATABASE_ID }}
           PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-results.json
-        run: |
-          export NOTION_TEST_CASES_DATABASE_ID="${NOTION_TEST_CASES_DATABASE_ID:-d91ba52b4486436d948530122210e909}"
-          npm run sync:notion
+        run: npm run sync:notion
 
       - name: Upload Playwright report
         if: always()
