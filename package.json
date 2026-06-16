@@ -5,6 +5,13 @@
   "scripts": {
     "test": "playwright test",
     "typecheck": "tsc --noEmit",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:functional": "playwright test --grep @functional",
+    "test:regression": "playwright test --grep @regression",
+    "test:password": "playwright test --grep @password",
+    "test:bug": "playwright test --grep @bug",
+    "test:notes": "playwright test tests/notes.spec.ts",
+    "test:one": "playwright test -g",
     "test:json": "PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json playwright test",
     "test:sync:notion": "PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json playwright test; TEST_EXIT=$?; npm run sync:notion; SYNC_EXIT=$?; if [ $TEST_EXIT -ne 0 ]; then exit $TEST_EXIT; fi; exit $SYNC_EXIT",
     "test:remote": "node scripts/run-remote-workflow.js",

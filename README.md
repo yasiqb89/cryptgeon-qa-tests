@@ -24,9 +24,12 @@ npm test
 Useful focused runs:
 
 ```bash
-npx playwright test tests/notes.spec.ts
-npx playwright test -g "creates and reads a text note"
-npx playwright test --grep @smoke
+npm run test:smoke
+npm run test:functional
+npm run test:regression
+npm run test:password
+npm run test:notes
+npm run test:one -- "creates and reads a text note"
 ```
 
 Run headed:
@@ -86,17 +89,22 @@ The manual/test-case tracker is available as a view-only Notion page:
 
 GitHub Actions runs the Playwright suite and syncs results back to Notion.
 
-Run the workflow manually:
+To run tests from GitHub:
 
-```bash
-gh workflow run "Cryptgeon QA" --repo yasiqb89/cryptgeon-qa-tests --ref main
-```
+1. Open the repository in GitHub.
+2. Go to **Actions**.
+3. Select **Cryptgeon QA**.
+4. Click **Run workflow**.
+5. Choose the test scope:
+   - `full`
+   - `smoke`
+   - `functional`
+   - `regression`
+   - `password`
+   - `bug`
+6. Click **Run workflow**.
 
-Watch the run:
-
-```bash
-gh run watch --repo yasiqb89/cryptgeon-qa-tests --exit-status
-```
+The optional URL field can be left empty. By default, tests run against `http://onetimeshare.gsfleet.io`.
 
 The Notion token is already configured as a GitHub Actions secret in this repository.
 Reviewers only need the GitHub repository link and the shared Notion page link; they do not need the token.

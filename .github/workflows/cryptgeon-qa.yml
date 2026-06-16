@@ -5,6 +5,23 @@ env:
 
 on:
   workflow_dispatch:
+    inputs:
+      test_scope:
+        description: Tests to run
+        required: true
+        default: full
+        type: choice
+        options:
+          - full
+          - smoke
+          - functional
+          - regression
+          - password
+          - bug
+      base_url:
+        description: Optional Cryptgeon URL override
+        required: false
+        type: string
   push:
     branches:
       - main
@@ -32,12 +49,37 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Select test scope
+        id: test-scope
+        env:
+          TEST_SCOPE: ${{ github.event.inputs.test_scope }}
+        run: |
+          case "${TEST_SCOPE:-full}" in
+            smoke) echo "grep=@smoke" >> "$GITHUB_OUTPUT" ;;
+            functional) echo "grep=@functional" >> "$GITHUB_OUTPUT" ;;
+            regression) echo "grep=@regression" >> "$GITHUB_OUTPUT" ;;
+            password) echo "grep=@password" >> "$GITHUB_OUTPUT" ;;
+            bug) echo "grep=@bug" >> "$GITHUB_OUTPUT" ;;
+            *) echo "grep=" >> "$GITHUB_OUTPUT" ;;
+          esac
+
       - name: Run Playwright tests
         id: playwright
         continue-on-error: true
         env:
+          CRYPTGEON_BASE_URL_INPUT: ${{ github.event.inputs.base_url }}
           PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-results.json
-        run: npm test
+          TEST_GREP: ${{ steps.test-scope.outputs.grep }}
+        run: |
+          if [ -n "$CRYPTGEON_BASE_URL_INPUT" ]; then
+            export CRYPTGEON_BASE_URL="$CRYPTGEON_BASE_URL_INPUT"
+          fi
+
+          if [ -n "$TEST_GREP" ]; then
+            npm test -- --grep "$TEST_GREP"
+          else
+            npm test
+          fi
 
       - name: Check Notion sync configuration
         id: notion
