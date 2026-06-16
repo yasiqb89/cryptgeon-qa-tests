@@ -1,19 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
-
-type TextNoteOptions = {
-  expirationMinutes?: number
-  password?: string
-}
-
-type PasswordProtectedTextNote = {
-  password: string
-  text: string
-}
-
-type ExpiringTextNote = {
-  expirationMinutes: number
-  text: string
-}
+import type { ExpiringTextNote, PasswordProtectedTextNote, TextNoteOptions } from '../types/noteTypes'
 
 // Page object for the Cryptgeon create-note screen.
 export class CreateNotePage {

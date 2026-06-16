@@ -1,9 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
-
-type PasswordProtectedNote = {
-  link: string
-  password: string
-}
+import type { PasswordProtectedNote } from '../types/noteTypes'
 
 // Page object for opening and revealing an existing Cryptgeon note.
 export class NotePage {
