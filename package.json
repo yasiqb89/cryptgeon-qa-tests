@@ -1,0 +1,22 @@
+{
+  "name": "cryptgeon-qa-tests",
+  "version": "1.0.0",
+  "description": "Playwright QA tests for a deployed Cryptgeon instance.",
+  "scripts": {
+    "test": "playwright test",
+    "test:json": "PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json playwright test",
+    "test:sync:notion": "PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json playwright test; TEST_EXIT=$?; npm run sync:notion; SYNC_EXIT=$?; if [ $TEST_EXIT -ne 0 ]; then exit $TEST_EXIT; fi; exit $SYNC_EXIT",
+    "sync:notion": "node scripts/sync-notion-results.js",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "typescript": "^5.8.3"
+  }
+}
