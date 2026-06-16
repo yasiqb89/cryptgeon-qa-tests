@@ -85,6 +85,18 @@ PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json npm test
 npm run sync:notion
 ```
 
+Remote GitHub Actions run:
+
+```bash
+npm run test:remote
+```
+
+Remote GitHub Actions run and watch until it finishes:
+
+```bash
+npm run test:remote:watch
+```
+
 GitHub Actions sync:
 
 - Add repository secret `NOTION_TOKEN` with a Notion integration token.
