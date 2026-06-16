@@ -17,34 +17,19 @@ npx playwright install chromium
 
 ## Run
 
-Run the full suite:
-
 ```bash
 npm test
 ```
 
-Run one spec file:
+Useful focused runs:
 
 ```bash
 npx playwright test tests/notes.spec.ts
-```
-
-Run one test by title:
-
-```bash
 npx playwright test -g "creates and reads a text note"
-```
-
-Run tests by tag:
-
-```bash
 npx playwright test --grep @smoke
-npx playwright test --grep @functional
-npx playwright test --grep @regression
-npx playwright test --grep @password
 ```
 
-Run with a visible browser for the live demo:
+Run headed:
 
 ```bash
 npm run test:headed
@@ -69,24 +54,8 @@ CRYPTGEON_BASE_URL=http://onetimeshare.gsfleet.io npm test
 - A consumed one-view note is not available after reload.
 - Known generated-password sharing gap is tracked as an expected failing `@bug` test.
 
-## Tags
-
-Tests are tagged so they can be run as a full suite or filtered for targeted checks.
-
-```text
-@smoke                Basic deployment and UI availability
-@ui                   UI rendering checks
-@functional           Main happy-path behavior
-@regression           Deletion and expiration behavior
-@note                 Standard note creation and reading
-@password             Custom and generated password behavior
-@generated-password   Dice-generated password behavior
-@expiration           Time-limited note behavior
-@one-view             One-view/self-destruct behavior
-@bug                  Known product gap coverage
-```
-
-The `@bug` generated-password sharing test is intentionally marked with Playwright `test.fail(...)`. It still runs in the normal suite and documents the missing copy/share control, but CI stays green while the product bug is known. If the app later adds a generated-password copy/share control, remove `test.fail(...)` and keep the assertion as normal regression coverage.
+Tests use tags such as `@smoke`, `@functional`, `@regression`, `@password`, and `@bug`.
+The `@bug` generated-password sharing test is marked with Playwright `test.fail(...)`, so it documents the known product issue without failing CI.
 
 ## Structure
 
@@ -107,55 +76,29 @@ tests/smoke.spec.ts    Deployment smoke checks
 tests/notes.spec.ts    Note creation, reading, and deletion behavior
 ```
 
-## Optional Test Case Tracker
+## Notion Test Case Tracker
 
 The manual/test-case tracker is available as a view-only Notion page:
 
 [Cryptgeon QA Test Cases](https://app.notion.com/p/d91ba52b4486436d948530122210e909?v=38178e34662681bb82ce000c9611cb16&source=copy_link)
 
-## Optional Notion Result Sync
+## Remote Run
 
-Notion sync is optional reporting and is not required to run the assignment tests.
+GitHub Actions runs the Playwright suite and syncs results back to Notion.
 
-Automation flow:
-
-1. Playwright writes a JSON result file when `PLAYWRIGHT_JSON_OUTPUT_NAME` is set.
-2. `scripts/sync-notion-results.js` reads that JSON file.
-3. The script matches each Playwright test title to the Notion `Test Function` field.
-4. The matching Notion row is updated with `Result`, `Status`, `Last Run`, `Run URL`, and `Failure Summary`.
-
-Notion setup:
-
-- Share the Notion test-case database/page with the Notion integration.
-- Add the integration token as `NOTION_TOKEN`.
-- The token is created from Notion integrations and is stored only as a local environment variable or GitHub Actions secret.
-- The default database ID is already configured in `scripts/sync-notion-results.js`; override it with `NOTION_TEST_CASES_DATABASE_ID` only if the database changes.
-
-Local sync:
-
-```bash
-export NOTION_TOKEN=your_notion_integration_token
-export NOTION_TEST_CASES_DATABASE_ID=your_database_id
-PLAYWRIGHT_JSON_OUTPUT_NAME=playwright-results.json npm test
-npm run sync:notion
-```
-
-Remote GitHub Actions run:
+Run the workflow manually:
 
 ```bash
 gh workflow run "Cryptgeon QA" --repo yasiqb89/cryptgeon-qa-tests --ref main
 ```
 
-Watch the latest GitHub Actions run until it finishes:
+Watch the run:
 
 ```bash
 gh run watch --repo yasiqb89/cryptgeon-qa-tests --exit-status
 ```
 
-GitHub Actions sync:
+The Notion token is already configured as a GitHub Actions secret in this repository.
+Reviewers only need the GitHub repository link and the shared Notion page link; they do not need the token.
 
-- Add repository secret `NOTION_TOKEN` with a Notion integration token.
-- Optionally add repository variable `NOTION_TEST_CASES_DATABASE_ID` with the Notion database ID. If omitted, the current Cryptgeon QA database ID is used.
-- If `NOTION_TOKEN` is missing, the workflow skips Notion sync and still runs the Playwright tests.
-
-The workflow runs on pushes to `main`, pull requests, manual dispatch, and the daily schedule. Playwright results are uploaded as an artifact named `playwright-report`.
+The workflow also runs automatically on pushes to `main`, pull requests, and the daily schedule.
