@@ -24,6 +24,16 @@ test.describe('Cryptgeon note lifecycle', () => {
     await notePage.expectTextVisible(text)
   })
 
+  // Generated password check: verifies the dice-generated password can decrypt the note when shared separately.
+  test('creates and reads a generated-password text note', async ({ createNotePage, notePage }) => {
+    const text = uniqueSecret('generated-password')
+
+    const note = await createNotePage.createGeneratedPasswordProtectedTextNote({ text })
+    await notePage.openAndRevealPasswordProtectedNote(note)
+
+    await notePage.expectTextVisible(text)
+  })
+
   // Timer check: verifies a time-limited note disappears after its expiration window.
   test('expires a text note after the configured timer', async ({ createNotePage, notePage, page }) => {
     test.setTimeout(90_000)

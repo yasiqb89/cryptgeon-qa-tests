@@ -1,5 +1,11 @@
 import { expect, type Locator, type Page } from '@playwright/test'
-import type { ExpiringTextNote, PasswordProtectedTextNote, TextNoteOptions } from '../types/noteTypes'
+import type {
+  CreatedPasswordProtectedNote,
+  ExpiringTextNote,
+  GeneratedPasswordProtectedTextNote,
+  PasswordProtectedTextNote,
+  TextNoteOptions,
+} from '../types/noteTypes'
 
 // Page object for the Cryptgeon create-note screen.
 export class CreateNotePage {
@@ -12,6 +18,7 @@ export class CreateNotePage {
   readonly expirationInput: Locator
   readonly customPasswordSwitch: Locator
   readonly passwordInput: Locator
+  readonly generatePasswordButton: Locator
 
   // Initializes the page object with the browser page and create-note locators.
   constructor(page: Page) {
@@ -24,6 +31,7 @@ export class CreateNotePage {
     this.expirationInput = page.getByTestId('field-expiration')
     this.customPasswordSwitch = page.getByTestId('custom-password')
     this.passwordInput = page.getByTestId('password')
+    this.generatePasswordButton = page.getByRole('button', { name: /dice/i })
   }
 
   // Opens the Cryptgeon home page where users create notes.
@@ -68,5 +76,26 @@ export class CreateNotePage {
 
   async createExpiringTextNote(note: ExpiringTextNote) {
     return this.createTextNote(note.text, { expirationMinutes: note.expirationMinutes })
+  }
+
+  async createGeneratedPasswordProtectedTextNote(
+    note: GeneratedPasswordProtectedTextNote,
+  ): Promise<CreatedPasswordProtectedNote> {
+    await this.goto()
+    await this.noteInput.fill(note.text)
+    await this.advancedSwitch.click()
+    await this.customPasswordSwitch.click()
+    await this.generatePasswordButton.click()
+
+    const password = await this.passwordInput.inputValue()
+    await expect(this.passwordInput).not.toHaveValue('')
+
+    await this.createButton.click()
+    await expect(this.shareLinkInput).toBeVisible()
+
+    return {
+      link: await this.shareLinkInput.inputValue(),
+      password,
+    }
   }
 }

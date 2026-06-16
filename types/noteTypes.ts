@@ -17,3 +17,9 @@ export type PasswordProtectedNote = {
   link: string
   password: string
 }
+
+export type CreatedPasswordProtectedNote = PasswordProtectedNote
+
+export type GeneratedPasswordProtectedTextNote = {
+  text: string
+}
