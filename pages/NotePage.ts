@@ -1,5 +1,10 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 
+type PasswordProtectedNote = {
+  link: string
+  password: string
+}
+
 // Page object for opening and revealing an existing Cryptgeon note.
 export class NotePage {
   readonly page: Page
@@ -35,6 +40,10 @@ export class NotePage {
       await this.passwordInput.fill(password)
     }
     await this.reveal()
+  }
+
+  async openAndRevealPasswordProtectedNote(note: PasswordProtectedNote) {
+    await this.openAndReveal(note.link, note.password)
   }
 
   // Confirms the decrypted note contains the expected secret text.

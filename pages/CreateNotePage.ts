@@ -5,6 +5,16 @@ type TextNoteOptions = {
   password?: string
 }
 
+type PasswordProtectedTextNote = {
+  password: string
+  text: string
+}
+
+type ExpiringTextNote = {
+  expirationMinutes: number
+  text: string
+}
+
 // Page object for the Cryptgeon create-note screen.
 export class CreateNotePage {
   readonly page: Page
@@ -64,5 +74,13 @@ export class CreateNotePage {
     await expect(this.shareLinkInput).toBeVisible()
 
     return this.shareLinkInput.inputValue()
+  }
+
+  async createPasswordProtectedTextNote(note: PasswordProtectedTextNote) {
+    return this.createTextNote(note.text, { password: note.password })
+  }
+
+  async createExpiringTextNote(note: ExpiringTextNote) {
+    return this.createTextNote(note.text, { expirationMinutes: note.expirationMinutes })
   }
 }

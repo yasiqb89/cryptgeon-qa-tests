@@ -24,8 +24,8 @@ test.describe('Cryptgeon note lifecycle', () => {
     const text = uniqueSecret('password')
     const password = uniqueSecret('custom-password')
 
-    const link = await createNotePage.createTextNote(text, { password })
-    await notePage.openAndReveal(link, password)
+    const link = await createNotePage.createPasswordProtectedTextNote({ password, text })
+    await notePage.openAndRevealPasswordProtectedNote({ link, password })
 
     await notePage.expectTextVisible(text)
   })
@@ -38,7 +38,7 @@ test.describe('Cryptgeon note lifecycle', () => {
     const notePage = new NotePage(page)
     const text = uniqueSecret('expiration')
 
-    const link = await createNotePage.createTextNote(text, { expirationMinutes: 1 })
+    const link = await createNotePage.createExpiringTextNote({ expirationMinutes: 1, text })
     await notePage.openAndReveal(link)
     await notePage.expectTextVisible(text)
 
